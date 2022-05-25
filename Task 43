@@ -14,6 +14,46 @@ namespace Task_43
         private bool _isWork = true;
         private List<Book> _books = new List<Book>();
 
+        public void Work()
+        {
+            string userInput;
+
+            while (_isWork)
+            {
+                Console.WriteLine("\nДобро пожаловать в библиотеку! Выбирите команду:" +
+                    "\n1. Добавить книгу;" +
+                    "\n2. Удалить книгу;" +
+                    "\n3. Показать все книги;" +
+                    "\n4. Найти книгу по параметру;" +
+                    "\n5. Выход.");
+
+                userInput = Console.ReadLine();
+                Console.Clear();
+
+                switch (userInput)
+                {
+                    case "1":
+                        AddBook();
+                        break;
+                    case "2":
+                        DeleteBook();
+                        break;
+                    case "3":
+                        ShowBooks();
+                        PutPlug("\nДля продолжения нажмите любую клавишу.");
+                        break;
+                    case "4":
+                        SearchBook();
+                        break;
+                    case "6":
+                        _isWork = false;
+                        break;
+                    default:
+                        Console.WriteLine("\nДанные не корректны");
+                        break;
+                }
+            }
+        }
         private void AddBook()
         {
             string author;
@@ -33,7 +73,7 @@ namespace Task_43
             genre = Console.ReadLine();
 
             Console.Write("\nВведите год выхода книги: ");
-            isStringNumber = CheckString(out yearOfRelease, out result);
+            isStringNumber = ConversionString(out yearOfRelease, out result);
 
             if (isStringNumber)
             {
@@ -54,7 +94,7 @@ namespace Task_43
             Console.Clear();
         }
 
-        private bool CheckString(out string userInput, out int result)
+        private bool ConversionString(out string userInput, out int result)
         {
             userInput = " ";
             result = 0;
@@ -94,12 +134,19 @@ namespace Task_43
                 ShowBooks();
                 Console.Write("\nВведите уникальный номер книги для ее удаления: ");
 
-                isStringNumber = CheckString(out userInput, out result);
+                isStringNumber = ConversionString(out userInput, out result);
 
                 if (isStringNumber)
                 {
-                    _books.RemoveAt(result - 1);
-                    PutPlug("\nКнига удалена! Для продолжения нажмите любую клавишу.");
+                    if (result > 0 && result <= _books.Count)
+                    {
+                        _books.RemoveAt(result - 1);
+                        PutPlug("\nКнига удалена! Для продолжения нажмите любую клавишу.");
+                    }
+                    else
+                    {
+                        PutPlug("\nПроверьте ввод данных.");
+                    }
                 }
                 else
                 {
@@ -161,7 +208,7 @@ namespace Task_43
             {
                 if (author.ToLower() == book.Author.ToLower())
                 {
-                    Console.WriteLine($"Автор - {book.Author} Название - {book.Title} Год выхода - {book.YearOfRelease} Жанр - {book.Genre}");
+                    book.ShowInfo();
                     PutPlug("\nВот что мы нашли! Для продолжения нажмите любую клавишу.");
                 }
             }
@@ -178,7 +225,7 @@ namespace Task_43
             {
                 if (title.ToLower() == book.Title.ToLower())
                 {
-                    Console.WriteLine($"Автор - {book.Author} Название - {book.Title} Год выхода - {book.YearOfRelease} Жанр - {book.Genre}");
+                    book.ShowInfo();
                     PutPlug("\nВот что мы нашли! Для продолжения нажмите любую клавишу.");
                 }
             }
@@ -186,17 +233,24 @@ namespace Task_43
 
         private void SearchYearOfRelease()
         {
-            int yearOfRelease;
+            string yearOfRelease;
+            int result;
+            bool isStringNumber;
             Console.Write("Введите год издания книги: ");
-            yearOfRelease = Convert.ToInt32(Console.ReadLine());
-
-            foreach (var book in _books)
+            if (isStringNumber = ConversionString(out yearOfRelease, out result))
             {
-                if (yearOfRelease == book.YearOfRelease)
+                foreach (var book in _books)
                 {
-                    Console.WriteLine($"Автор - {book.Author} Название - {book.Title} Год выхода - {book.YearOfRelease} Жанр - {book.Genre}");
-                    PutPlug("\nВот что мы нашли! Для продолжения нажмите любую клавишу.");
+                    if (result == book.YearOfRelease)
+                    {
+                        book.ShowInfo();
+                        PutPlug("\nВот что мы нашли! Для продолжения нажмите любую клавишу.");
+                    }
                 }
+            }
+            else
+            {
+                PutPlug("\nДанные не корректны.");
             }
         }
         private void SearchGenre()
@@ -210,49 +264,8 @@ namespace Task_43
             {
                 if (genre.ToLower() == book.Genre.ToLower())
                 {
-                    Console.WriteLine($"Автор - {book.Author} Название - {book.Title} Год выхода - {book.YearOfRelease} Жанр - {book.Genre}");
+                    book.ShowInfo();
                     PutPlug("\nВот что мы нашли! Для продолжения нажмите любую клавишу.");
-                }
-            }
-        }
-
-        public void Work()
-        {
-            string userInput;
-
-            while (_isWork)
-            {
-                Console.WriteLine("\nДобро пожаловать в библиотеку! Выбирите команду:" +
-                    "\n1. Добавить книгу;" +
-                    "\n2. Удалить книгу;" +
-                    "\n3. Показать все книги;" +
-                    "\n4. Найти книгу по параметру;" +
-                    "\n5. Выход.");
-
-                userInput = Console.ReadLine();
-                Console.Clear();
-
-                switch (userInput)
-                {
-                    case "1":
-                        AddBook();
-                        break;
-                    case "2":
-                        DeleteBook();
-                        break;
-                    case "3":
-                        ShowBooks();
-                        PutPlug("\nДля продолжения нажмите любую клавишу.");
-                        break;
-                    case "4":
-                        SearchBook();
-                        break;
-                    case "6":
-                        _isWork = false;
-                        break;
-                    default:
-                        Console.WriteLine("\nДанные не корректны");
-                        break;
                 }
             }
         }
