@@ -73,7 +73,7 @@ namespace Task_43
             genre = Console.ReadLine();
 
             Console.Write("\nВведите год выхода книги: ");
-            isStringNumber = ConvertString(out yearOfRelease, out result);
+            isStringNumber = TryGetNumber(out yearOfRelease, out result);
 
             if (isStringNumber)
             {
@@ -94,7 +94,7 @@ namespace Task_43
             Console.Clear();
         }
 
-        private bool ConvertString(out string userInput, out int result)
+        private bool TryGetNumber(out string userInput, out int result)
         {
             userInput = " ";
             result = 0;
@@ -134,7 +134,7 @@ namespace Task_43
                 ShowBooks();
                 Console.Write("\nВведите уникальный номер книги для ее удаления: ");
 
-                isStringNumber = ConvertString(out userInput, out result);
+                isStringNumber = TryGetNumber(out userInput, out result);
 
                 if (isStringNumber)
                 {
@@ -237,7 +237,7 @@ namespace Task_43
             int result;
             bool isStringNumber;
             Console.Write("Введите год издания книги: ");
-            if (isStringNumber = ConvertString(out yearOfRelease, out result))
+            if (isStringNumber = TryGetNumber(out yearOfRelease, out result))
             {
                 foreach (var book in _books)
                 {
